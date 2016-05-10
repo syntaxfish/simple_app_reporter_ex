@@ -120,6 +120,9 @@ defmodule Reporter.GooglePlay do
       # has name: {"span", [{"class", "author-name"}],
       #             [{"a", [{"href", "/store/people/details?id=113906718293225094082"}],
       #               ["Chris Kapia"]}]}
+      # {_, [_, _, {_, id}], _, _ , _}
+      {_, [_, _, {_, id}], _} = Floki.find(single, ".review-header") |> Enum.at(0)
+
       {_, _, name} = Floki.find(single, ".author-name") |> Enum.at(0)
       case name do
         [pri_name] when is_tuple(pri_name) ->
@@ -145,6 +148,7 @@ defmodule Reporter.GooglePlay do
                |> Map.put("rating", rating)
                |> Map.put("title", Enum.at(title, 0))
                |> Map.put("body", body)
+               |> Map.put("id", id)
 
       inspect list
       List.insert_at(list, -1, result)
